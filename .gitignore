@@ -1,32 +1,343 @@
-# Prerequisites
-*.d
+#include <iomanip> 
+#include <cstring> 
+#include <stdlib.h>
+#include <conio.h>
+#include <stdio.h> 
+#include <fstream>                  
+#include <iostream>
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
+using namespace std;
 
-# Precompiled Headers
-*.gch
-*.pch
+struct Takipci
+{
+	char ad[80];
+	
+	char kullanici_adi[5];
+	char cinsiyet;	
+};
+void TakipciEkleme();
+void TakipciListeleme();
+void TakipciArama();
+void TakipciSil();
+void TakipciDuzenle();
+int main(){
+	
+	char anamenu;
+	do{
+	system("cls");
+	
+	cout << "-*-*-*-*-*-*Merhaba*-*-*-*-*-" << endl ;
+	cout << "*       Secim Yapiniz       *" << endl ;
+	cout << "-     1-Takipçi Ekleme      -" << endl ;
+	cout << "*     2- Takipci Listeleme  *" << endl ;
+	cout << "-    3- Takipci Arama       -"<< endl;
+	cout << "*    4- Takipci Sil         *"<< endl;
+	cout << "-     5- Takipci Duzenle    -"<< endl;
+	cout << "*-*-*-*-*-*-*-*-*-*-*-*-*-*-*" << endl ;
+    char secim;
+	cin>> secim;
+	
+	switch(secim) 
+	{
+		case '1' : 
+		{
+		TakipciEkleme();
+		break;	
+		}
+		case '2' : 
+		{
+		 TakipciListeleme()	;
+		 break;
+		}
+		case '3' : 
+		{
+		 TakipciArama()	;
+		 break;
+		}
+		case '4' : 
+		{
+		 TakipciSil()	;
+		 break;
+		}
+		case '5' : 
+		{
+		 TakipciDuzenle();
+		 break;
+		}
+	}
+	
+	cout << "Anamenuye Donmek icin: a basin cikmak icin: c" <<endl ; 
+	anamenu=getche();
+	
+    }while(anamenu=='a');
+     
 
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
+return 0;
+}
 
-# Fortran module files
-*.mod
-*.smod
+Takipci tkpci;
 
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
+void TakipciEkleme()
+{
+	ofstream yaz("takipci.dat",ios::binary |ios::app);
+	char secim;
+	int adet=0;
+	
+	do{
+	cout << "Takipci Ad  Soyad Giriniz" << endl;
+cin>>tkpci.ad;
+	cout << "Takipci Kullanici Adini Giriniz" << endl;
+	cin>> tkpci.kullanici_adi;
+	cout << "Takipci Cinsiyet Giriniz (E/K)" << endl;
+	tkpci.cinsiyet=getche();
+	cout << endl;
+	yaz.write((char*)&tkpci, sizeof(tkpci));	
+	adet++;	
+	cout << "Baska Takipci Eklemek Ister misin  ? (E/H)" << endl;
+	secim=getche();
+	cout << endl;
+	}while(secim=='e' || secim=='E');
+	
+	cout << adet << " adet Takipci Ekledi.." << endl;
+	
+	yaz.close();
+	
+	
+}
 
-# Executables
-*.exe
-*.out
-*.app
+void TakipciListeleme()
+{
+	
+	ifstream oku("takipci.dat",ios::binary |ios::app);
+	
+	oku.seekg(0,ios::end);
+	int kayits=oku.tellg()/sizeof(tkpci);
+	cout << "Toplam Takipci Kayit Sayisi:"<< kayits << endl;
+	
+	if(kayits>0)
+	{
+		for(int i=0; i<kayits;i++)
+		{
+			oku.seekg(i*sizeof(tkpci));
+			oku.read((char*)&tkpci, sizeof(tkpci));	
+		
+			cout << i+1 << ". Takipcinin Bilgileri"<< endl;
+			cout << "Takipci  Adi Soyadi : "<< tkpci.ad <<endl ;
+			cout << "Takipci Kullanici Adi: "<< tkpci.kullanici_adi <<endl ;
+			if(tkpci.cinsiyet=='e' || tkpci.cinsiyet=='E')
+			cout << "Takipci Cinsiyet: ERKEK " <<endl ;
+			else if(tkpci.cinsiyet=='k' || tkpci.cinsiyet=='K')
+			cout << "Takipci Cinsiyet: KADIN " <<endl ;
+			
+		}
+		
+		
+	}
+	else
+	cout << "Takipci  Bulunamadi..." << endl;
+
+	oku.close();
+}
+void TakipciArama()
+{
+	
+	ifstream oku("takipci.dat",ios::binary |ios::app);
+	
+	oku.seekg(0,ios::end);
+	int kayits=oku.tellg()/sizeof(tkpci);
+//	cout << "Toplam Ogrenci Kayit Sayisi:"<< kayits << endl;
+
+cout <<"Aranan Takipcinin Kullanici Adini Girin"<< endl;
+char kullanici_adi[80];
+cin>>kullanici_adi ;
+ 		
+	if(kayits>0)
+	{
+		for(int i=0; i<kayits;i++)
+		{
+			+
+			oku.seekg(i*sizeof(tkpci));
+			oku.read((char*)&tkpci, sizeof(tkpci));
+			
+			if(strcmp(tkpci.kullanici_adi,kullanici_adi)==0)
+			{
+			cout <<  "Bulunan Takipcinin Bilgileri"<< endl;
+			cout << "Takipci Adi Soyadi: "<< tkpci.ad <<endl ;
+			cout << "Takipci Kullanici Adi: "<< tkpci.kullanici_adi <<endl ;
+			if(tkpci.cinsiyet=='e' || tkpci.cinsiyet=='E')
+			cout << "Takipci Cinsiyet: ERKEK " <<endl ;
+			else if(tkpci.cinsiyet=='k' || tkpci.cinsiyet=='K')
+			cout << "Takipci Cinsiyet: KADIN " <<endl ;
+		    }
+		}
+		
+		
+	}
+	else
+	cout << "Takipci Bulunamadi..." << endl;
+
+	oku.close();
+}
+
+void TakipciSil()
+{
+	 char kullanici_adi[80];
+     char secim= ' ';
+     bool var=false;
+     
+    ifstream oku("takipci.dat",ios::binary |ios::app);
+	
+	oku.seekg(0,ios::end);
+
+	int kayitsayisi=oku.tellg()/sizeof(tkpci);
+	
+     cout<<"Kaydini Sileceginiz Takipcinin Adini Giriniz : ";
+     cin>>kullanici_adi;
+
+     for(int i=0;i<kayitsayisi;i++)
+     {
+            oku.seekg(i*sizeof(tkpci));
+			oku.read((char*)&tkpci, sizeof(tkpci));
+			
+     if(strcmp(tkpci.kullanici_adi,kullanici_adi)==0)
+       {
+                 cout<<endl;
+                 cout<<"Ogrencinin";
+                 cout<<"\nAdi Soyadi : "<<tkpci.ad;
+                 
+                  cout<<"\nKullanici Adi : "<<tkpci.kullanici_adi;
+                 cout<<"\nCinsiyet [E/K]: ";
+                 if(tkpci.cinsiyet=='e'||tkpci.cinsiyet=='E')
+                 cout<<"Erkek";
+                 if(tkpci.cinsiyet=='k'||tkpci.cinsiyet=='K')
+                 cout<<"Kadin";
+                
+         	 				  
+                cout<<"\n\nSilmek Istediginiz Takipci Bu Mu? [E/H] : ";
+                 secim=getche();
+            if(secim == 'H' || secim == 'h')
+              {      
+			    Takipci y_tkpci;
+                ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+                
+                strcpy(y_tkpci.ad,tkpci.ad);
+                strcpy(y_tkpci.kullanici_adi,tkpci.kullanici_adi);
+                tkpci.cinsiyet=y_tkpci.cinsiyet;
+                        
+                y_dosya.write((char*)&tkpci, sizeof(tkpci));
+                y_dosya.close();
+              }
+            if(secim=='e'||secim=='E')
+              {
+   			   	var=true;
+  		 	  }
+        }
+             else
+             {
+              Takipci y_tkpci;
+              ofstream y_dosya("Yedek.dat",ios::app|ios::binary);
+              
+              strcpy(y_tkpci.ad,tkpci.ad);
+              strcpy(y_tkpci.kullanici_adi,tkpci.kullanici_adi);
+              tkpci.cinsiyet=y_tkpci.cinsiyet;
+                       
+              y_dosya.write((char*)&tkpci, sizeof(tkpci));
+              y_dosya.close();
+             }
+     }
+    oku.close();
+    if(var)
+    {
+               remove("takipci.dat");
+               rename("Yedek.dat","takipci.dat");
+               cout<<"\n Kayit Silindi"<<endl;
+    }
+    else
+    {
+               remove("Yedek.dat");
+               cout<<"\n Kayit Bulunamadi"<<endl;                  
+    }
+	
+	
+}
+
+void TakipciDuzenle()
+{
+	 char kullanici_adi[80];
+     char secim= ' ';
+     bool var=false;
+     
+    ifstream oku("takipci.dat",ios::binary |ios::app);
+	
+	oku.seekg(0,ios::end);
+
+	int kayitsayisi=oku.tellg()/sizeof(tkpci);
+		
+     cout<<"Kaydini Duzelteceginiz Kullanicinin Adini Giriniz : ";
+     cin>>kullanici_adi;
+
+     for(int i=0;i<kayitsayisi;i++)
+     {
+            oku.seekg(i*sizeof(tkpci));
+			oku.read((char*)&tkpci, sizeof(tkpci));
+			
+     		if(strcmp(tkpci.kullanici_adi,kullanici_adi)==0)
+     		  {
+     		  	
+                 cout<<endl;
+                 cout<<"Takipcinin";
+                 cout<<"\nAdi : "<<tkpci.ad;
+                 cout<<"\nKullanici Adi  : "<<tkpci.kullanici_adi;
+                 cout<<"\nCinsiyet [E/K]: ";
+                 if(tkpci.cinsiyet=='e'||tkpci.cinsiyet=='E')
+                 cout<<"Erkek";
+                 if(tkpci.cinsiyet=='k'||tkpci.cinsiyet=='K')
+                 cout<<"Kadin";
+                 
+                  cout<<"\n\nDuzeltmek Istediginiz Takipci Bu Mu? [E/H] : ";
+                  secim=getche();
+                  if(secim == 'E' || secim == 'e')
+                  {
+                     	var=true;
+                        ofstream dosya("Yedek.dat",ios::app|ios::binary);
+                        cout << "\nTakipci Ad Giriniz" << endl;
+						cin>> tkpci.ad;
+						cout << "Takipci No Giriniz" << endl;
+						cin>> tkpci.kullanici_adi;
+						cout << "Takipci Cinsiyet Giriniz (E/K)" << endl;
+						tkpci.cinsiyet=getche();
+						cout << endl;
+		  
+                        dosya.write((char*)&tkpci, sizeof(tkpci));
+                        dosya.close();
+            	  }
+            	 else
+                 	{
+                         Takipci y_tkpci;
+                         ofstream y_dosya;
+                         y_dosya.open("Yedek.dat",ios::app|ios::binary);
+                         
+                    	 strcpy(y_tkpci.ad,tkpci.ad);
+            			 strcpy(y_tkpci.kullanici_adi,tkpci.kullanici_adi);
+             			  y_tkpci.cinsiyet=tkpci.cinsiyet;
+                         
+             			 y_dosya.write((char*)&y_tkpci, sizeof(y_tkpci));
+                         y_dosya.close();
+                   }
+     }
+ }
+    oku.close();
+    if(var)
+    {
+               remove("takipci.dat");
+               rename("Yedek.dat","takipci.dat");
+               cout<<"\nKayit Duzeltildi."<<endl;
+    }
+    else
+    {
+               remove("Yedek.dat");
+               cout<<"\nKayit Bulunamadi"<<endl;                  
+    }
+
+}
+
